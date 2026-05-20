@@ -52,10 +52,7 @@ export class User {
   })
   role!: 'user' | 'admin';
 
-  @Column({
-    name: 'created_at',
-    type: 'timestamp',
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
   @OneToMany(

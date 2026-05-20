@@ -27,23 +27,13 @@ export class Lesson {
   })
   endDate!: Date;
 
-  @Column({
-    name: 'recurrence_rule',
-    type: 'varchar',
-    nullable: true,
-  })
-  recurrenceRule!: string;
-
   @Column({ type: 'varchar' })
   location!: string;
 
   @Column({ type: 'int' })
   capacity!: number;
 
-  @Column({
-    name: 'created_at',
-    type: 'timestamp',
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
   @OneToMany(

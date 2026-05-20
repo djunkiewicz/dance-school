@@ -30,9 +30,6 @@ export class Reservation {
   })
   status!: 'active' | 'cancelled' | 'pending';
 
-  @Column({
-    name: 'created_at',
-    type: 'timestamp',
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 }

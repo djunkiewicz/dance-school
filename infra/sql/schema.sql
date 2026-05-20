@@ -15,7 +15,6 @@ CREATE TABLE lessons (
     description TEXT,
     start_date DATETIME NOT NULL,
     end_date DATETIME NOT NULL,
-    recurrence_rule VARCHAR(255),
     location VARCHAR(255) NOT NULL,
     capacity INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
