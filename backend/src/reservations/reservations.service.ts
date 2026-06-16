@@ -14,6 +14,13 @@ export class ReservationsService {
     return this.reservationsRepository.find({ relations: { user: true, lesson: true } });
   }
 
+  async findByUserId(userId: number): Promise<Reservation[]> {
+    return this.reservationsRepository.find({
+      where: { user: { id: userId } },
+      relations: { user: true, lesson: true },
+    });
+  }
+
   async findOne(id: number): Promise<Reservation | null> {
     return this.reservationsRepository.findOne({ where: { id }, relations: { user: true, lesson: true } });
   }
