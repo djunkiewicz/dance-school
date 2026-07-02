@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { Reservation } from '../reservations/reservation.entity';
+import { LessonSeries } from './lesson-series.entity';
 
 @Entity('lessons')
 export class Lesson {
@@ -35,6 +36,13 @@ export class Lesson {
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
+
+  @ManyToOne(() => LessonSeries, (series) => series.lessons, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'series_id' })
+  series!: LessonSeries | null;
 
   @OneToMany(
     () => Reservation,

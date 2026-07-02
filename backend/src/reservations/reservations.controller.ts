@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Put, Patch, Delete, Param, Body, UseGuards, Request } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { Reservation } from './reservation.entity';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../auth/roles.guard';
-import { Roles } from '../auth/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('reservations')
 export class ReservationsController {
@@ -30,6 +30,13 @@ export class ReservationsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('my')
+  createForUser(@Request() req, @Body() body: { lessonId: number }): Promise<Reservation> {
+    return this.reservationsService.createForUser(req.user.id, body.lessonId);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
   @Post()
   create(@Body() reservationData: Partial<Reservation>): Promise<Reservation> {
     return this.reservationsService.create(reservationData);
@@ -43,6 +50,13 @@ export class ReservationsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Patch('my/:id/cancel')
+  cancel(@Request() req: any, @Param('id') id: number): Promise<Reservation> {
+    return this.reservationsService.cancelForUser(req.user.id, id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
   @Delete(':id')
   remove(@Param('id') id: number): Promise<void> {
     return this.reservationsService.remove(id);

@@ -9,6 +9,19 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE lesson_series (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    location VARCHAR(255) NOT NULL,
+    capacity INT NOT NULL,
+    interval_weeks INT NOT NULL DEFAULT 1,
+    duration_minutes INT NOT NULL,
+    start_date DATETIME NOT NULL,
+    end_date DATETIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE lessons (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -17,7 +30,9 @@ CREATE TABLE lessons (
     end_date DATETIME NOT NULL,
     location VARCHAR(255) NOT NULL,
     capacity INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    series_id INT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (series_id) REFERENCES lesson_series(id) ON DELETE CASCADE
 );
 
 CREATE TABLE reservations (

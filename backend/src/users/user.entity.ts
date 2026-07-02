@@ -42,6 +42,7 @@ export class User {
   @Column({
     name: 'password_hash',
     type: 'varchar',
+    select: false,
   })
   passwordHash!: string;
 
