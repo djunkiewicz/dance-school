@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, Query } from '@nestjs/common';
 import { LessonsService } from './lessons.service';
 import { Lesson } from './lesson.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -10,8 +10,8 @@ export class LessonsController {
   constructor(private readonly lessonsService: LessonsService) {}
 
   @Get()
-  findAll(): Promise<Lesson[]> {
-    return this.lessonsService.findAll();
+  findAll(@Query('from') from?: string, @Query('to') to?: string): Promise<Lesson[]> {
+    return this.lessonsService.findAll(from, to);
   }
 
   @Get(':id')

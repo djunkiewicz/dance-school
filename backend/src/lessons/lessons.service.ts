@@ -10,8 +10,11 @@ export class LessonsService {
     private lessonsRepository: Repository<Lesson>,
   ) {}
 
-  async findAll(): Promise<Lesson[]> {
-    return this.lessonsRepository.find();
+  async findAll(from?: string, to?: string): Promise<Lesson[]> {
+    const qb = this.lessonsRepository.createQueryBuilder('lesson');
+    if (from) qb.andWhere('lesson.startDate >= :from', { from });
+    if (to) qb.andWhere('lesson.startDate <= :to', { to });
+    return qb.orderBy('lesson.startDate', 'ASC').getMany();
   }
 
   async findOne(id: number): Promise<Lesson | null> {

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, Request, ForbiddenException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -37,8 +37,17 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('me/password')
+  changePassword(@Request() req: any, @Body() body: { oldPassword: string; newPassword: string }): Promise<void> {
+    return this.usersService.changePassword(req.user.id, body.oldPassword, body.newPassword);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
-  update(@Param('id') id: number, @Body() updateData: Partial<User>): Promise<User | null> {
+  update(@Param('id') id: number, @Body() updateData: Partial<User>, @Request() req: any): Promise<User | null> {
+    if (req.user.id !== Number(id) && req.user.role !== 'admin') {
+      throw new ForbiddenException('You can only update your own profile');
+    }
     return this.usersService.update(id, updateData);
   }
 
